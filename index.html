@@ -1,276 +1,379 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>For You ❤️</title>
+<style>
+/* =========================================================
+   💗 HEART GALAXY
+   ========================================================= */
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+#heartGalaxy {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
 
-  <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+/* Individual hearts */
+.galaxy-heart {
+  position: absolute;
+  left: 50%;
+  top: 50%;
 
-  <style>
-    *{box-sizing:border-box}
-    html,body{margin:0;width:100%;height:100%;overflow:hidden}
-    body{
-      font-family:"Poppins","Hind Siliguri",sans-serif;
-      color:#fff;
-      background:
-        radial-gradient(circle at 15% 20%,rgba(255,255,255,.22),transparent 24%),
-        radial-gradient(circle at 85% 80%,rgba(255,130,210,.18),transparent 28%),
-        linear-gradient(135deg,#160b2e,#40104f 45%,#0b2346);
-      display:grid;
-      place-items:center;
-      transition:background 1.2s ease;
+  color: #fff;
+  font-size: 15px;
+
+  opacity: 0;
+
+  text-shadow:
+    0 0 5px rgba(255,255,255,.9),
+    0 0 12px rgba(255,120,220,.8),
+    0 0 25px rgba(255,80,180,.6);
+
+  animation:
+    galaxyFloat var(--duration) ease-in-out infinite,
+    heartTwinkle var(--twinkle) ease-in-out infinite;
+
+  animation-delay: var(--delay);
+
+  transform:
+    translate(
+      var(--x),
+      var(--y)
+    )
+    scale(var(--scale));
+
+  will-change:
+    transform,
+    opacity;
+}
+
+
+/* Some hearts are pink */
+.galaxy-heart.pink {
+  color: #ff9bd8;
+
+  text-shadow:
+    0 0 5px #fff,
+    0 0 15px #ff70c8,
+    0 0 30px #ff2fa7;
+}
+
+
+/* Some hearts are soft blue */
+.galaxy-heart.blue {
+  color: #b9efff;
+
+  text-shadow:
+    0 0 5px #fff,
+    0 0 15px #68dfff,
+    0 0 30px #42bfff;
+}
+
+
+/* Large foreground hearts */
+.galaxy-heart.big {
+  font-size: 28px;
+}
+
+
+/* Tiny distant stars/hearts */
+.galaxy-heart.small {
+  font-size: 8px;
+  opacity: .5;
+}
+
+
+/* =========================================================
+   🌌 GALAXY MOTION
+   ========================================================= */
+
+@keyframes galaxyFloat {
+
+  0% {
+    opacity: 0;
+
+    transform:
+      translate(
+        var(--x),
+        var(--y)
+      )
+      scale(.2)
+      rotate(-20deg);
+  }
+
+  15% {
+    opacity: var(--opacity);
+  }
+
+  50% {
+
+    transform:
+      translate(
+        calc(var(--x) + var(--moveX)),
+        calc(var(--y) + var(--moveY))
+      )
+      scale(var(--scale))
+      rotate(15deg);
+  }
+
+  85% {
+    opacity: var(--opacity);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translate(
+        calc(var(--x) - var(--moveX)),
+        calc(var(--y) - var(--moveY))
+      )
+      scale(.3)
+      rotate(-15deg);
+  }
+}
+
+
+/* =========================================================
+   ✨ HEART TWINKLE
+   ========================================================= */
+
+@keyframes heartTwinkle {
+
+  0%,
+  100% {
+    filter: brightness(.7);
+  }
+
+  50% {
+    filter: brightness(1.8);
+  }
+}
+
+
+/* =========================================================
+   💫 CENTER GALAXY GLOW
+   ========================================================= */
+
+#heartGalaxy::before {
+
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 250px;
+  height: 250px;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,150,220,.16),
+      rgba(255,70,180,.06),
+      transparent 70%
+    );
+
+  filter: blur(20px);
+
+  animation:
+    galaxyPulse 5s ease-in-out infinite;
+}
+
+
+@keyframes galaxyPulse {
+
+  0%,
+  100% {
+    transform:
+      translate(-50%, -50%)
+      scale(.8);
+
+    opacity: .5;
+  }
+
+  50% {
+    transform:
+      translate(-50%, -50%)
+      scale(1.3);
+
+    opacity: 1;
+  }
+}
+
+
+/* =========================================================
+   📱 MOBILE OPTIMIZATION
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .galaxy-heart {
+    font-size: 12px;
+  }
+
+  .galaxy-heart.big {
+    font-size: 22px;
+  }
+
+  #heartGalaxy::before {
+    width: 180px;
+    height: 180px;
+  }
+}
+</style>
+
+
+<script>
+/* =========================================================
+   💗 CREATE HEART GALAXY
+   ========================================================= */
+
+(function createHeartGalaxy() {
+
+  /* Create galaxy container */
+
+  const galaxy = document.createElement("div");
+
+  galaxy.id = "heartGalaxy";
+
+  document.body.prepend(galaxy);
+
+
+  /* Heart types */
+
+  const hearts = [
+    "♡",
+    "♥",
+    "❤",
+    "💗",
+    "💖",
+    "💕",
+    "💓",
+    "✦"
+  ];
+
+
+  /* Create 85 floating hearts */
+
+  for (let i = 0; i < 85; i++) {
+
+    const heart = document.createElement("span");
+
+    heart.className = "galaxy-heart";
+
+
+    /* Random heart */
+
+    heart.innerHTML =
+      hearts[
+        Math.floor(
+          Math.random() * hearts.length
+        )
+      ];
+
+
+    /* Random position */
+
+    const x =
+      (Math.random() * 100 - 50) + "vw";
+
+    const y =
+      (Math.random() * 100 - 50) + "vh";
+
+
+    /* Random movement */
+
+    const moveX =
+      (Math.random() * 80 - 40) + "px";
+
+    const moveY =
+      (Math.random() * 80 - 40) + "px";
+
+
+    /* Random scale */
+
+    const scale =
+      (0.35 + Math.random() * 1.4).toFixed(2);
+
+
+    /* Random opacity */
+
+    const opacity =
+      (0.25 + Math.random() * .75).toFixed(2);
+
+
+    /* Random animation */
+
+    const duration =
+      (7 + Math.random() * 12).toFixed(2) + "s";
+
+    const twinkle =
+      (2 + Math.random() * 4).toFixed(2) + "s";
+
+    const delay =
+      (-Math.random() * 15).toFixed(2) + "s";
+
+
+    /* Apply variables */
+
+    heart.style.setProperty("--x", x);
+
+    heart.style.setProperty("--y", y);
+
+    heart.style.setProperty("--moveX", moveX);
+
+    heart.style.setProperty("--moveY", moveY);
+
+    heart.style.setProperty("--scale", scale);
+
+    heart.style.setProperty("--opacity", opacity);
+
+    heart.style.setProperty("--duration", duration);
+
+    heart.style.setProperty("--twinkle", twinkle);
+
+    heart.style.setProperty("--delay", delay);
+
+
+    /* Random color */
+
+    const colorRandom =
+      Math.random();
+
+    if (colorRandom < .18) {
+
+      heart.classList.add("blue");
+
+    } else if (colorRandom < .48) {
+
+      heart.classList.add("pink");
+
     }
 
-    .aurora,.aurora:before,.aurora:after{
-      position:fixed;content:"";inset:auto;border-radius:50%;
-      filter:blur(60px);pointer-events:none;
-    }
-    .aurora{
-      width:260px;height:260px;left:-80px;top:10%;
-      background:rgba(255,85,190,.28);
-      animation:float1 9s ease-in-out infinite;
-    }
-    .aurora:before{
-      width:220px;height:220px;right:-85vw;top:55vh;
-      background:rgba(74,188,255,.22);
-      animation:float2 11s ease-in-out infinite;
-    }
-    .aurora:after{
-      width:180px;height:180px;left:70vw;top:-40vh;
-      background:rgba(255,211,91,.13);
+
+    /* Random size */
+
+    if (Math.random() < .12) {
+
+      heart.classList.add("big");
+
     }
 
-    #particles{position:fixed;inset:0;pointer-events:none}
-    .particle{
-      position:absolute;bottom:-30px;opacity:0;
-      animation:rise linear infinite;
-      user-select:none;
+    if (Math.random() < .18) {
+
+      heart.classList.add("small");
+
     }
 
-    .card{
-      width:min(92vw,520px);
-      min-height:570px;
-      padding:34px 24px 30px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      position:relative;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.18);
-      border-radius:34px;
-      background:rgba(255,255,255,.09);
-      box-shadow:0 25px 80px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.16);
-      backdrop-filter:blur(20px);
-      -webkit-backdrop-filter:blur(20px);
-      animation:cardIn 1s cubic-bezier(.2,.8,.2,1);
-    }
-    .card:before{
-      content:"";position:absolute;inset:-2px;border-radius:34px;
-      background:linear-gradient(120deg,transparent 20%,rgba(255,255,255,.18),transparent 80%);
-      transform:translateX(-100%);
-      animation:shine 5s ease-in-out infinite;
-    }
 
-    .screen{position:relative;z-index:2;width:100%}
-    .hidden{display:none!important}
+    galaxy.appendChild(heart);
+  }
 
-    .lottie-wrap{
-      width:230px;height:230px;margin:0 auto 8px;
-      filter:drop-shadow(0 12px 24px rgba(255,93,190,.22));
-      animation:softFloat 3.8s ease-in-out infinite;
-    }
-
-    .eyebrow{
-      font-size:13px;letter-spacing:3px;text-transform:uppercase;
-      opacity:.7;margin-bottom:8px
-    }
-    h1{
-      margin:0 0 24px;
-      font-size:clamp(27px,7vw,40px);
-      line-height:1.25;
-      font-weight:700;
-      text-shadow:0 4px 20px rgba(0,0,0,.2);
-    }
-
-    .buttons{display:flex;flex-direction:column;gap:13px;align-items:center}
-    button{
-      width:min(100%,330px);border:0;cursor:pointer;
-      padding:15px 22px;border-radius:999px;
-      color:white;font:600 16px "Poppins","Hind Siliguri",sans-serif;
-      background:linear-gradient(100deg,#ff4fa3,#ff79c7);
-      box-shadow:0 10px 30px rgba(255,71,163,.28);
-      transition:transform .25s ease,box-shadow .25s ease,filter .25s ease;
-      position:relative;overflow:hidden;
-    }
-    button:before{
-      content:"";position:absolute;inset:0;
-      background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.35),transparent 65%);
-      transform:translateX(-120%);transition:transform .55s ease;
-    }
-    button:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 15px 35px rgba(255,71,163,.4)}
-    button:hover:before{transform:translateX(120%)}
-    button:active{transform:scale(.96)}
-    button.alt{background:rgba(255,255,255,.12);box-shadow:none;border:1px solid rgba(255,255,255,.2)}
-
-    .success-heart{
-      width:105px;height:105px;margin:0 auto 18px;
-      display:grid;place-items:center;font-size:58px;
-      border-radius:50%;
-      background:rgba(255,255,255,.12);
-      box-shadow:0 0 0 0 rgba(255,101,190,.5);
-      animation:heartPop .9s cubic-bezier(.17,.89,.32,1.28),pulse 2s 1s infinite;
-    }
-    .success-title{font-size:clamp(34px,9vw,52px);margin-bottom:12px}
-    .success-text{font-size:16px;line-height:1.8;opacity:.9;margin:0 auto 22px;max-width:390px}
-
-    .type{min-height:32px}
-    .cursor{display:inline-block;width:2px;height:1em;background:#fff;margin-left:4px;vertical-align:-2px;animation:blink .7s infinite}
-
-    .burst{
-      position:fixed;left:50%;top:50%;width:10px;height:10px;
-      border-radius:50%;pointer-events:none;z-index:10;
-    }
-    .burst i{
-      position:absolute;left:0;top:0;font-style:normal;
-      transform:rotate(var(--r)) translateY(-10px);
-      animation:burst 900ms cubic-bezier(.15,.7,.25,1) forwards;
-      font-size:18px;
-    }
-
-    @keyframes cardIn{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:none}}
-    @keyframes shine{0%,55%{transform:translateX(-100%)}75%,100%{transform:translateX(100%)}}
-    @keyframes softFloat{50%{transform:translateY(-10px)}}
-    @keyframes pulse{50%{box-shadow:0 0 0 18px rgba(255,101,190,0)}}
-    @keyframes heartPop{0%{transform:scale(.2);opacity:0}70%{transform:scale(1.12)}100%{transform:scale(1)}}
-    @keyframes rise{0%{transform:translateY(0) scale(.7) rotate(0deg);opacity:0}12%{opacity:.7}100%{transform:translateY(-115vh) scale(1.2) rotate(30deg);opacity:0}}
-    @keyframes float1{50%{transform:translate(100px,70px) scale(1.15)}}
-    @keyframes float2{50%{transform:translate(-80px,-50px) scale(1.2)}}
-    @keyframes blink{50%{opacity:0}}
-    @keyframes burst{0%{opacity:1;transform:rotate(var(--r)) translateY(-10px) scale(1)}100%{opacity:0;transform:rotate(var(--r)) translateY(-145px) scale(.2)}}
-
-    @media(max-height:700px){
-      .card{min-height:500px;padding:20px}
-      .lottie-wrap{width:180px;height:180px}
-      h1{margin-bottom:16px}
-    }
-  </style>
-</head>
-
-<body>
-  <div class="aurora"></div>
-  <div id="particles"></div>
-
-  <main class="card">
-    <section id="questionScreen" class="screen">
-      <div class="lottie-wrap">
-        <dotlottie-wc
-          src="https://lottie.host/9f0f22c4-39cb-43d4-8c3e-8f1d3d2c6e72/4z9Jq8vR1w.lottie"
-          autoplay loop>
-        </dotlottie-wc>
-      </div>
-
-      <div class="eyebrow">A little question for you ✨</div>
-      <h1>Will you be my GF? 🥰</h1>
-
-      <div class="buttons">
-        <button onclick="acceptLove()">Yes! 💖</button>
-        <button class="alt" onclick="acceptLove()">Of Course, Yes! 💕</button>
-      </div>
-    </section>
-
-    <section id="successScreen" class="screen hidden">
-      <div class="success-heart">💗</div>
-      <div class="eyebrow">My favorite answer ✨</div>
-      <h1 class="success-title">I Love You! ❤️</h1>
-      <p class="success-text">
-        আজকের এই ছোট্ট মুহূর্তটা<br>
-        একটু সুন্দর করে মনে রাখার জন্য। 🌸
-      </p>
-      <div class="type"><span id="typedText"></span><span class="cursor"></span></div>
-    </section>
-  </main>
-
-  <script>
-    const particles = document.getElementById("particles");
-    const questionScreen = document.getElementById("questionScreen");
-    const successScreen = document.getElementById("successScreen");
-    const typedText = document.getElementById("typedText");
-
-    const symbols = ["♡","♥","✦","✨","🌸","💗","•"];
-
-    // Floating particles
-    for(let i=0;i<32;i++){
-      const p=document.createElement("span");
-      p.className="particle";
-      p.textContent=symbols[Math.floor(Math.random()*symbols.length)];
-      p.style.left=Math.random()*100+"vw";
-      p.style.fontSize=(10+Math.random()*20)+"px";
-      p.style.animationDuration=(7+Math.random()*9)+"s";
-      p.style.animationDelay=(-Math.random()*12)+"s";
-      p.style.opacity=.2+Math.random()*.6;
-      particles.appendChild(p);
-    }
-
-    function createBurst(){
-      const burst=document.createElement("div");
-      burst.className="burst";
-      for(let i=0;i<24;i++){
-        const s=document.createElement("i");
-        s.textContent=symbols[Math.floor(Math.random()*symbols.length)];
-        s.style.setProperty("--r",(i*15)+"deg");
-        s.style.animationDelay=(Math.random()*120)+"ms";
-        burst.appendChild(s);
-      }
-      document.body.appendChild(burst);
-      setTimeout(()=>burst.remove(),1200);
-    }
-
-    function typeWriter(text){
-      let i=0;
-      typedText.textContent="";
-      const timer=setInterval(()=>{
-        typedText.textContent += text[i++];
-        if(i>=text.length) clearInterval(timer);
-      },55);
-    }
-
-    function acceptLove(){
-      createBurst();
-
-      questionScreen.animate(
-        [
-          {opacity:1,transform:"scale(1) translateY(0)"},
-          {opacity:0,transform:"scale(.92) translateY(-20px)"}
-        ],
-        {duration:500,easing:"cubic-bezier(.2,.8,.2,1)",fill:"forwards"}
-      );
-
-      setTimeout(()=>{
-        questionScreen.classList.add("hidden");
-        successScreen.classList.remove("hidden");
-
-        document.body.style.background =
-          "radial-gradient(circle at 50% 35%,rgba(255,126,203,.38),transparent 35%),linear-gradient(135deg,#2b0b35,#7b185e 48%,#102b58)";
-
-        successScreen.animate(
-          [
-            {opacity:0,transform:"scale(.88) translateY(25px)"},
-            {opacity:1,transform:"scale(1) translateY(0)"}
-          ],
-          {duration:900,easing:"cubic-bezier(.17,.89,.32,1.28)",fill:"forwards"}
-        );
-
-        setTimeout(()=>{
-          typeWriter("Some moments are worth remembering forever. ✨");
-        },500);
-      },520);
-    }
-  </script>
-</body>
-</html>
+})();
+</script>
